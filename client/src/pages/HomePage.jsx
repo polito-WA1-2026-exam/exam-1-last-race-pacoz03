@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/useAuth.js';
 
 const PHASES = [
   {
@@ -31,6 +32,8 @@ const RULES = [
 ];
 
 export default function HomePage() {
+  const { user, loading } = useAuth();
+
   return (
     <main className="flex-grow w-full max-w-[720px] mx-auto px-6 py-10 flex flex-col gap-10">
       <section className="flex flex-col gap-4 text-center py-10 border-b border-neutral-200">
@@ -85,20 +88,54 @@ export default function HomePage() {
       <section className="mt-4 mb-10">
         <div className="bg-white border border-neutral-200 flex flex-col sm:flex-row">
           <div className="p-6 flex-grow flex flex-col justify-center gap-2">
-            <h2 className="text-2xl font-semibold uppercase tracking-tight">
-              Accedi per giocare
-            </h2>
-            <p className="text-neutral-600">
-              La vista anonima mostra solo le istruzioni. Per ricevere partenza e destinazione devi prima accedere.
-            </p>
+            {loading ? (
+              <h2 className="text-2xl font-semibold uppercase tracking-tight">
+                Caricamento sessione…
+              </h2>
+            ) : user ? (
+              <>
+                <h2 className="text-2xl font-semibold uppercase tracking-tight">
+                  Bentornato, {user.displayName}
+                </h2>
+                <p className="text-neutral-600">
+                  La rete è pronta: scegli se partire ora o controllare la classifica.
+                </p>
+              </>
+            ) : (
+              <>
+                <h2 className="text-2xl font-semibold uppercase tracking-tight">
+                  Accedi per giocare
+                </h2>
+                <p className="text-neutral-600">
+                  La vista anonima mostra solo le istruzioni. Per ricevere partenza e destinazione devi prima accedere.
+                </p>
+              </>
+            )}
           </div>
           <div className="p-6 sm:w-72 flex flex-col items-stretch justify-center gap-2 bg-neutral-50 border-t sm:border-t-0 sm:border-l border-neutral-200">
-            <Link
-              to="/login"
-              className="bg-black text-white px-6 py-3 text-center uppercase no-underline hover:bg-neutral-800 transition-colors"
-            >
-              Accedi
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  to="/gioca"
+                  className="bg-black text-white px-6 py-3 text-center uppercase no-underline hover:bg-neutral-800 transition-colors"
+                >
+                  Avvia partita
+                </Link>
+                <Link
+                  to="/classifica"
+                  className="border border-black px-6 py-3 text-center uppercase no-underline hover:bg-neutral-100 transition-colors"
+                >
+                  Classifica
+                </Link>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="bg-black text-white px-6 py-3 text-center uppercase no-underline hover:bg-neutral-800 transition-colors"
+              >
+                Accedi
+              </Link>
+            )}
           </div>
         </div>
       </section>
