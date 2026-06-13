@@ -45,5 +45,9 @@ export function getNetwork() {
   return request('/network');
 }
 
-const API = { login, logout, getCurrentUser, getHealth, getNetwork };
+export function startGame() {
+  return request('/games', { method: 'POST' });
+}
+
+const API = { login, logout, getCurrentUser, getHealth, getNetwork, startGame };
 export default API;

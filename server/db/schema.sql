@@ -27,3 +27,11 @@ CREATE TABLE IF NOT EXISTS segments (
   station_b   INTEGER NOT NULL REFERENCES stations(id),
   UNIQUE(line_id, station_a, station_b)
 );
+
+CREATE TABLE IF NOT EXISTS games (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id      INTEGER NOT NULL REFERENCES users(id),
+  start_id     INTEGER NOT NULL REFERENCES stations(id),
+  dest_id      INTEGER NOT NULL REFERENCES stations(id),
+  created_at   TEXT NOT NULL DEFAULT (datetime('now'))
+);
