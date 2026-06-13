@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import API from '../api/API.js';
 import NetworkMap from '../components/NetworkMap.jsx';
 import NetworkLegend from '../components/NetworkLegend.jsx';
+import PlanningView from './PlanningView.jsx';
 
 export default function GamePage() {
   const [phase, setPhase] = useState('setup');
@@ -83,14 +84,27 @@ export default function GamePage() {
     );
   }
 
+  if (phase === 'planning' && network && game) {
+    return (
+      <PlanningView
+        network={network}
+        game={game}
+        onSubmitted={() => setPhase('result')}
+      />
+    );
+  }
+
   return (
     <main className="flex-grow w-full max-w-[720px] mx-auto px-6 py-10 flex flex-col gap-4">
-      <span className="text-xs uppercase text-neutral-500">Fase 2 di 4</span>
-      <h1 className="text-4xl font-bold uppercase tracking-tight">Pianificazione</h1>
-      <p className="text-neutral-600">
-        Partenza: <strong>{game?.start?.name}</strong> · Arrivo: <strong>{game?.destination?.name}</strong>
-      </p>
-      <p className="text-neutral-500 text-sm">In costruzione.</p>
+      <h1 className="text-2xl font-semibold uppercase tracking-tight">Partita conclusa</h1>
+      <p className="text-neutral-600">Percorso inviato.</p>
+      <button
+        type="button"
+        onClick={() => { setGame(null); setPhase('setup'); }}
+        className="self-start border border-black px-6 py-3 uppercase hover:bg-neutral-100 transition-colors"
+      >
+        Nuova partita
+      </button>
     </main>
   );
 }

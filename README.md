@@ -32,8 +32,11 @@ npm run dev    # Vite su http://localhost:5173
 - Route `/login` — form di **accesso**. Card "biglietto" con campi
   `username`/`password`, validazione client (campi obbligatori) e server
   (Passport local + `crypto.scrypt`).
-- Route `/gioca` — protetta. Placeholder (in costruzione).
-- Route `/classifica` — protetta. Placeholder (in costruzione).
+- Route `/gioca` — protetta. Macchina a stati `setup → planning`. Setup mostra
+  la mappa completa con legenda e bottone "Inizia partita". Planning: timer
+  90 s, mappa "Vista nodi" senza linee, lista 14 segmenti selezionabili una
+  volta sola, chip "Percorso in costruzione", "Conferma percorso".
+- Route `/classifica` — protetta. In sviluppo.
 
 ## API Server
 
