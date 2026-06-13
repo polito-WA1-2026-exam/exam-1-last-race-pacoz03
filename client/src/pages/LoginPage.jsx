@@ -10,6 +10,7 @@ export default function LoginPage() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({ username: '', password: '', form: '' });
   const [submitting, setSubmitting] = useState(false);
 
@@ -74,18 +75,30 @@ export default function LoginPage() {
 
             <div className="flex flex-col gap-1">
               <label htmlFor="password" className="text-xs uppercase text-neutral-600">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                className="border border-neutral-300 rounded px-3 py-2"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                aria-invalid={!!errors.password}
-                aria-describedby={errors.password ? 'password-err' : undefined}
-                disabled={submitting}
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  className="w-full border border-neutral-300 rounded px-3 py-2 pr-20"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  aria-invalid={!!errors.password}
+                  aria-describedby={errors.password ? 'password-err' : undefined}
+                  disabled={submitting}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  disabled={submitting}
+                  aria-label={showPassword ? 'Nascondi password' : 'Mostra password'}
+                  aria-pressed={showPassword}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-xs uppercase text-neutral-600 hover:text-black disabled:opacity-50"
+                >
+                  {showPassword ? 'Nascondi' : 'Mostra'}
+                </button>
+              </div>
               {errors.password && (
                 <p id="password-err" className="text-xs text-red-600 uppercase">
                   {errors.password}
