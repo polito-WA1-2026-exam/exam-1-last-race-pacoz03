@@ -59,6 +59,17 @@ una sessione Passport valida; in assenza rispondono `401 { error }`.
 - **DELETE `/api/sessions/current`** — logout. *Protetta.*
   - **Risposta 204** (vuota) + cookie `lastrace.sid` invalidato.
 
+### Rete (mappa)
+- **GET `/api/network`** — *protetta.*
+  - **Risposta 200**:
+    ```json
+    {
+      "lines":    [ { "id", "name", "color" } ],
+      "stations": [ { "id", "name", "interchange": <boolean>, "x", "y" } ],
+      "segments": [ { "id", "lineId", "a": <stationId>, "b": <stationId> } ]
+    }
+    ```
+
 ## Database Tables
 
 File SQLite: `server/db/last_race.sqlite`. Schema in `server/db/schema.sql`.

@@ -41,5 +41,9 @@ export function getHealth() {
   return request('/health');
 }
 
-const API = { login, logout, getCurrentUser, getHealth };
+export function getNetwork() {
+  return request('/network');
+}
+
+const API = { login, logout, getCurrentUser, getHealth, getNetwork };
 export default API;

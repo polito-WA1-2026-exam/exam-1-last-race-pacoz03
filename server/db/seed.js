@@ -9,20 +9,20 @@ const LINES = [
 ];
 
 const STATIONS = [
-  { name: 'Aurora',     x: 100, y: 100, interchange: false },
-  { name: 'Belvedere',  x: 200, y: 100, interchange: false },
-  { name: 'Fontego',    x: 400, y: 100, interchange: false },
-  { name: 'Cardo',      x: 300, y: 250, interchange: false },
-  { name: 'Gineceo',    x: 450, y: 350, interchange: false },
-  { name: 'Mercato',    x: 600, y: 350, interchange: false },
-  { name: 'Decumano',   x: 300, y: 450, interchange: false },
-  { name: 'Lanterna',   x: 550, y: 450, interchange: false },
-  { name: 'Navile',     x: 600, y: 550, interchange: false },
-  { name: 'Rivellino',  x: 750, y: 550, interchange: false },
-  { name: 'Eridano',    x: 200, y: 600, interchange: false },
-  { name: 'Ostiense',   x: 500, y: 650, interchange: false },
-  { name: 'Quadrivio',  x: 600, y: 650, interchange: false },
-  { name: 'Palatino',   x: 750, y: 650, interchange: false },
+  { name: 'Aurora',     x:  70, y: 138, interchange: false },
+  { name: 'Belvedere',  x: 206, y: 138, interchange: false },
+  { name: 'Fontego',    x: 478, y: 138, interchange: false },
+  { name: 'Cardo',      x: 342, y: 274, interchange: true  },
+  { name: 'Gineceo',    x: 478, y: 342, interchange: true  },
+  { name: 'Mercato',    x: 682, y: 342, interchange: false },
+  { name: 'Decumano',   x: 342, y: 478, interchange: true  },
+  { name: 'Lanterna',   x: 614, y: 478, interchange: false },
+  { name: 'Navile',     x: 682, y: 546, interchange: true  },
+  { name: 'Rivellino',  x: 818, y: 546, interchange: false },
+  { name: 'Eridano',    x: 206, y: 614, interchange: false },
+  { name: 'Ostiense',   x: 546, y: 682, interchange: false },
+  { name: 'Quadrivio',  x: 682, y: 682, interchange: false },
+  { name: 'Palatino',   x: 818, y: 682, interchange: false },
 ];
 
 const LINE_PATHS = {

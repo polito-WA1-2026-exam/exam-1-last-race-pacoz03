@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import session from 'express-session';
 import passport from './auth/passport.js';
 import sessionsRouter from './routes/sessions.js';
+import networkRouter from './routes/network.js';
 import './db/db.js';
 
 const app = express();
@@ -42,6 +43,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/sessions', sessionsRouter);
+app.use('/api/network', networkRouter);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
