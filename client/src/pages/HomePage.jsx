@@ -1,5 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/useAuth.js';
+import NetworkLegend from '../components/NetworkLegend.jsx';
+
+const LINES = [
+  { id: 1, name: 'Rossa',  color: '#E2231A' },
+  { id: 2, name: 'Blu',    color: '#0057B8' },
+  { id: 3, name: 'Verde',  color: '#00843D' },
+  { id: 4, name: 'Gialla', color: '#FFC20E' },
+];
 
 const PHASES = [
   {
@@ -68,6 +76,11 @@ export default function HomePage() {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <h2 className="text-lg font-semibold uppercase border-b border-neutral-200 pb-2">La rete</h2>
+        <NetworkLegend lines={LINES} />
       </section>
 
       <section className="bg-neutral-50 border-l-4 border-black p-6 flex flex-col gap-4">
