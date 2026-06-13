@@ -6,9 +6,9 @@ dist/
 .env
 .env.local
 
-# sqlite
-*.sqlite
 *.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal
 
 # logs
 *.log

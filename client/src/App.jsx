@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext.jsx';
+import LoginPage from './pages/LoginPage.jsx';
 
 function HomePage() {
   return (
@@ -9,21 +11,15 @@ function HomePage() {
   );
 }
 
-function LoginPage() {
-  return (
-    <main>
-      <h1>Accedi</h1>
-    </main>
-  );
-}
-
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
