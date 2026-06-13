@@ -7,8 +7,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "seed": "node db/seed.js"
+    "start": "node index.js",
+    "seed": "node db/seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "better-sqlite3": "^11.10.0",

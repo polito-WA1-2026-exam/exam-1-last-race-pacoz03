@@ -1,48 +1,105 @@
-# Exam #N: "Exam Title"
-## Student: s123456 LASTNAME FIRSTNAME 
+# Exam #1: "Last Race"
+## Student: s123456 LASTNAME FIRSTNAME
+
+> SPA single-player ambientata su una rete metropolitana fittizia. Il giocatore
+> riceve partenza e destinazione, pianifica un percorso valido in 90 secondi
+> e lo esegue: ogni tratta percorsa innesca un evento casuale (da −4 a +4
+> monete) e il punteggio finale è il saldo in monete a fine corsa.
+
+## Avvio del progetto
+
+Sono richiesti **Node 24 LTS** e **npm**. Pattern **"two servers"**: client su
+`:5173`, server su `:3001`, sessione via cookie HTTP-only con `credentials`.
+
+```sh
+# 1) Backend
+cd server
+npm install
+npm run seed   # solo la prima volta, popola SQLite (idempotente)
+npm start      # node su http://localhost:3001
+
+# 2) Frontend (in un'altra shell)
+cd client
+npm install
+npm run dev    # Vite su http://localhost:5173
+```
 
 ## React Client Application Routes
 
-- Route `/`: page content and purpose
-- Route `/something/:param`: page content and purpose, param specification
-- ...
+- Route `/` — pagina **Istruzioni**. Accessibile anche agli anonimi. Mostra
+  le 4 fasi del gioco e le regole chiave; CTA verso `/login` per l'anonimo,
+  "Avvia partita" + "Classifica" per l'utente loggato.
+- Route `/login` — form di **accesso**. Card "biglietto" con campi
+  `username`/`password`, validazione client (campi obbligatori) e server
+  (Passport local + `crypto.scrypt`).
+- Route `/gioca` — protetta. Placeholder (in costruzione).
+- Route `/classifica` — protetta. Placeholder (in costruzione).
 
 ## API Server
 
-- POST `/api/something`
-  - request parameters and request body content
-  - response body content
-- GET `/api/something`
-  - request parameters
-  - response body content
-- POST `/api/something`
-  - request parameters and request body content
-  - response body content
-- ...
+Tutte le rotte sono sotto `/api` e ritornano JSON. Le rotte protette richiedono
+una sessione Passport valida; in assenza rispondono `401 { error }`.
+
+### Health
+- **GET `/api/health`** — pubblico.
+  - **Risposta 200**: `{ "status": "ok", "authenticated": <boolean> }`.
+  - Usata anche dal client per il bootstrap della sessione (evita 401 in
+    console quando l'utente è anonimo).
+
+### Sessioni
+- **POST `/api/sessions`** — login.
+  - **Body**: `{ "username": <string>, "password": <string> }` (entrambi
+    obbligatori e non vuoti, validati lato Express e lato React).
+  - **Risposta 200**: `{ "id": <number>, "username": <string>, "displayName": <string> }`.
+  - **400**: `{ "error": "Username obbligatorio." | "Password obbligatoria." }`.
+  - **401**: `{ "error": "Credenziali non valide." }`.
+- **GET `/api/sessions/current`** — utente loggato. *Protetta.*
+  - **Risposta 200**: `{ "id", "username", "displayName" }`.
+  - **401**: `{ "error": "Non autenticato." }`.
+- **DELETE `/api/sessions/current`** — logout. *Protetta.*
+  - **Risposta 204** (vuota) + cookie `lastrace.sid` invalidato.
 
 ## Database Tables
 
-- Table `users` - contains xx yy zz
-- Table `something` - contains ww qq ss
-- ...
+File SQLite: `server/db/last_race.sqlite`. Schema in `server/db/schema.sql`.
+
+- **`users`** — utenti registrati. Colonne: `id`, `username` (UNIQUE),
+  `display_name`, `salt`, `password_hash`. Password salate e cifrate con
+  `crypto.scrypt` (hash esadecimale di 32 byte).
+- **`lines`** — 4 linee metro (Rossa, Blu, Verde, Gialla). Colonne: `id`,
+  `name` (UNIQUE), `color` (hex).
+- **`stations`** — 14 stazioni con coordinate. Colonne: `id`, `name` (UNIQUE),
+  `is_interchange` (0/1), `x`, `y`.
+- **`segments`** — 14 archi (adiacenze tra stazioni). Colonne: `id`, `line_id`,
+  `station_a`, `station_b`, UNIQUE su `(line_id, station_a, station_b)`.
 
 ## Main React Components
 
-- `ListOfSomething` (in `List.js`): component purpose and main functionality
-- `GreatButton` (in `GreatButton.js`): component purpose and main functionality
-- ...
-
-(only _main_ components, minor ones may be skipped)
-
-## Screenshot
-
-![Screenshot](./img/screenshot.jpg)
+- **`App`** (`App.jsx`) — `BrowserRouter` + `AuthProvider`. Wrapper
+  `ChromeShell` che nasconde Header/Footer sulla rotta `/login`. Rotte
+  protette via `ProtectedRoute`.
+- **`AuthProvider`** (`contexts/AuthContext.jsx`) — context con `user`,
+  `loading`, `login`, `logout`. Bootstrap della sessione tramite
+  `GET /api/health` per non emettere 401 in console quando anonimo.
+  Hook `useAuth` esposto da `contexts/useAuth.js` (file separato per il
+  linter react-refresh).
+- **`ProtectedRoute`** (`components/ProtectedRoute.jsx`) — redirect a
+  `/login` mantenendo l'URL d'origine in `location.state.from`.
+- **`Header` / `Footer`** (`components/`) — chrome globale. Header mostra
+  "Accedi" per l'anonimo, `displayName` + "Logout" per l'utente loggato.
+- **`HomePage`** (`pages/HomePage.jsx`) — Istruzioni: 4 fasi del gioco,
+  regole chiave, CTA contestualizzata (anonimo vs loggato).
+- **`LoginPage`** (`pages/LoginPage.jsx`) — form di accesso con validazione
+  campi + gestione errore credenziali.
+- **`api/API.js`** — wrapper `fetch` con `credentials: 'include'` e gestione
+  errori JSON/testo.
 
 ## Users Credentials
 
-- username, password (plus any other requested info)
-- username, password (plus any other requested info)
+Definiti in `server/db/seed.js` (idempotente).
 
-## Use of AI Tools
-Briefly describe whether you used any AI tools (e.g., ChatGPT, GitHub Copilot, Claude) while working on this project, for which purposes (e.g., clarifying concepts, debugging, generating code), and how you verified or adapted their output.
-If you did not use any AI tools, simply state so.
+| username | password  |
+|----------|-----------|
+| `mario`  | mario123  |
+| `lucia`  | lucia123  |
+| `enzo`   | enzo123   |
