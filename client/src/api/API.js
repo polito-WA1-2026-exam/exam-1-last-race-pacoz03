@@ -49,5 +49,9 @@ export function startGame() {
   return request('/games', { method: 'POST' });
 }
 
-const API = { login, logout, getCurrentUser, getHealth, getNetwork, startGame };
+export function getRanking() {
+  return request('/ranking');
+}
+
+const API = { login, logout, getCurrentUser, getHealth, getNetwork, startGame, getRanking };
 export default API;

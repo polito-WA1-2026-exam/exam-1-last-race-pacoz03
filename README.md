@@ -73,6 +73,28 @@ una sessione Passport valida; in assenza rispondono `401 { error }`.
     }
     ```
 
+### Partite
+- **POST `/api/games`** — nuova partita. *Protetta.*
+  - **Body**: nessuno.
+  - **Risposta 200**:
+    ```json
+    {
+      "gameId": <number>,
+      "start":       { "id", "name" },
+      "destination": { "id", "name" },
+      "segments": [ { "a": <stationName>, "b": <stationName> } ]
+    }
+    ```
+    Il server sceglie partenza/destinazione con distanza minima 3 segmenti.
+    I segmenti ritornati contengono solo coppie di nomi: la linea di
+    appartenenza non viene esposta in Pianificazione.
+
+### Classifica
+- **GET `/api/ranking`** — *protetta.*
+  - **Risposta 200**: array di `{ rank, userId, username, displayName, best, gamesPlayed, isMe }`
+    ordinato per `best DESC, username ASC`. Per ogni utente `best` =
+    `MAX(final_score)` sulle sole partite con `valid=1` (0 se nessuna).
+
 ## Database Tables
 
 File SQLite: `server/db/last_race.sqlite`. Schema in `server/db/schema.sql`.
@@ -86,6 +108,12 @@ File SQLite: `server/db/last_race.sqlite`. Schema in `server/db/schema.sql`.
   `is_interchange` (0/1), `x`, `y`.
 - **`segments`** — 14 archi (adiacenze tra stazioni). Colonne: `id`, `line_id`,
   `station_a`, `station_b`, UNIQUE su `(line_id, station_a, station_b)`.
+- **`games`** — partite giocate. Colonne: `id`, `user_id`, `start_id`,
+  `dest_id`, `final_score` (`NULL` finché non conclusa), `valid` (0/1/NULL),
+  `created_at`. Saldi negativi vengono memorizzati come 0.
+- **`game_steps`** — eventi applicati tratta per tratta. Chiave composta
+  `(game_id, idx)`. Colonne: `from_id`, `to_id`, `event_id`, `effect`,
+  `total` (monete cumulative dopo lo step).
 
 ## Main React Components
 

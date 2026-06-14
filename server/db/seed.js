@@ -54,6 +54,17 @@ const getLineId    = db.prepare('SELECT id FROM lines WHERE name = ?');
 const getStationId = db.prepare('SELECT id FROM stations WHERE name = ?');
 const getUserId    = db.prepare('SELECT id FROM users WHERE username = ?');
 
+const countUserGames = db.prepare('SELECT COUNT(*) AS n FROM games WHERE user_id = ?');
+const insertGame = db.prepare(`
+  INSERT INTO games (user_id, start_id, dest_id, final_score, valid, created_at)
+  VALUES (?, ?, ?, ?, 1, datetime('now'))
+`);
+
+const SAMPLE_GAMES = [
+  { username: 'mario', start: 'Aurora',   dest: 'Mercato',  score: 27 },
+  { username: 'lucia', start: 'Eridano',  dest: 'Lanterna', score: 20 },
+];
+
 function seedNetwork() {
   const tx = db.transaction(() => {
     for (const l of LINES) insertLine.run(l.name, l.color);
@@ -79,9 +90,21 @@ async function seedUsers() {
   }
 }
 
+function seedSampleGames() {
+  for (const g of SAMPLE_GAMES) {
+    const userRow = getUserId.get(g.username);
+    if (!userRow) continue;
+    if (countUserGames.get(userRow.id).n > 0) continue;
+    const startId = getStationId.get(g.start).id;
+    const destId  = getStationId.get(g.dest).id;
+    insertGame.run(userRow.id, startId, destId, g.score);
+  }
+}
+
 async function main() {
   seedNetwork();
   await seedUsers();
+  seedSampleGames();
   console.log('[seed] OK');
 }
 

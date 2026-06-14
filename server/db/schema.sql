@@ -33,5 +33,18 @@ CREATE TABLE IF NOT EXISTS games (
   user_id      INTEGER NOT NULL REFERENCES users(id),
   start_id     INTEGER NOT NULL REFERENCES stations(id),
   dest_id      INTEGER NOT NULL REFERENCES stations(id),
+  final_score  INTEGER,
+  valid        INTEGER,
   created_at   TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS game_steps (
+  game_id   INTEGER NOT NULL REFERENCES games(id) ON DELETE CASCADE,
+  idx       INTEGER NOT NULL,
+  from_id   INTEGER NOT NULL REFERENCES stations(id),
+  to_id     INTEGER NOT NULL REFERENCES stations(id),
+  event_id  INTEGER NOT NULL REFERENCES events(id),
+  effect    INTEGER NOT NULL,
+  total     INTEGER NOT NULL,
+  PRIMARY KEY (game_id, idx)
 );
