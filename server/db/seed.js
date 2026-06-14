@@ -32,6 +32,17 @@ const LINE_PATHS = {
   Gialla: ['Palatino', 'Quadrivio', 'Navile', 'Rivellino'],
 };
 
+const EVENTS = [
+  { name: 'Viaggio tranquillo',    effect:  0 },
+  { name: 'Passeggero gentile',    effect: +1 },
+  { name: 'Posto a sedere libero', effect: +2 },
+  { name: 'Coincidenza perfetta',  effect: +3 },
+  { name: 'Controllore a bordo',   effect: -1 },
+  { name: 'Binario sbagliato',     effect: -2 },
+  { name: 'Ritardo in galleria',   effect: -3 },
+  { name: 'Sciopero improvviso',   effect: -4 },
+];
+
 const USERS = [
   { username: 'mario',  displayName: 'Mario Rossi',     password: 'mario123'  },
   { username: 'lucia',  displayName: 'Lucia Bianchi',   password: 'lucia123'  },
@@ -46,6 +57,9 @@ const insertStation = db.prepare(
 );
 const insertSegment = db.prepare(
   'INSERT OR IGNORE INTO segments (line_id, station_a, station_b) VALUES (?, ?, ?)'
+);
+const insertEvent = db.prepare(
+  'INSERT OR IGNORE INTO events (name, effect) VALUES (?, ?)'
 );
 const insertUser = db.prepare(
   'INSERT OR IGNORE INTO users (username, display_name, salt, password_hash) VALUES (?, ?, ?, ?)'
@@ -77,6 +91,7 @@ function seedNetwork() {
         insertSegment.run(lineId, a, b);
       }
     }
+    for (const e of EVENTS) insertEvent.run(e.name, e.effect);
   });
   tx();
 }

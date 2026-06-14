@@ -28,6 +28,12 @@ CREATE TABLE IF NOT EXISTS segments (
   UNIQUE(line_id, station_a, station_b)
 );
 
+CREATE TABLE IF NOT EXISTS events (
+  id     INTEGER PRIMARY KEY AUTOINCREMENT,
+  name   TEXT NOT NULL UNIQUE,
+  effect INTEGER NOT NULL CHECK (effect BETWEEN -4 AND 4)
+);
+
 CREATE TABLE IF NOT EXISTS games (
   id           INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id      INTEGER NOT NULL REFERENCES users(id),

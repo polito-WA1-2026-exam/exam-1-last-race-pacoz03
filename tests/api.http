@@ -1,0 +1,65 @@
+### Health (pubblico)
+GET http://localhost:3001/api/health
+
+
+### Login mario
+# @name login
+POST http://localhost:3001/api/sessions
+Content-Type: application/json
+
+{
+  "username": "mario",
+  "password": "mario123"
+}
+
+### Utente corrente (protetta)
+GET http://localhost:3001/api/sessions/current
+
+### Network (protetta) — linee, stazioni, segmenti
+GET http://localhost:3001/api/network
+
+### Nuova partita (protetta) — ritorna start/dest random
+# @name newGame
+POST http://localhost:3001/api/games
+
+### Classifica (protetta)
+GET http://localhost:3001/api/ranking
+
+### Logout
+DELETE http://localhost:3001/api/sessions/current
+
+### Login lucia
+POST http://localhost:3001/api/sessions
+Content-Type: application/json
+
+{
+  "username": "lucia",
+  "password": "lucia123"
+}
+
+### Login enzo
+POST http://localhost:3001/api/sessions
+Content-Type: application/json
+
+{
+  "username": "enzo",
+  "password": "enzo123"
+}
+
+### Login con credenziali sbagliate (atteso 401)
+POST http://localhost:3001/api/sessions
+Content-Type: application/json
+
+{
+  "username": "mario",
+  "password": "wrong"
+}
+
+### Body malformato (atteso 400)
+POST http://localhost:3001/api/sessions
+Content-Type: application/json
+
+{
+  "username": "",
+  "password": "x"
+}

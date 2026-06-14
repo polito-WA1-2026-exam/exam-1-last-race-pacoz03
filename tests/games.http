@@ -1,0 +1,45 @@
+### Login mario (necessario per le route protette)
+POST http://localhost:3001/api/sessions
+Content-Type: application/json
+
+{
+  "username": "mario",
+  "password": "mario123"
+}
+
+### Nuova partita — ritorna gameId, start, destination, segments
+# @name newGame
+POST http://localhost:3001/api/games
+
+### Invio percorso — usa il gameId della richiesta precedente
+# Sostituisci il body con i nomi delle stazioni del percorso costruito.
+POST http://localhost:3001/api/games/{{newGame.response.body.gameId}}/route
+Content-Type: application/json
+
+{
+  "route": ["Lanterna", "Belvedere", "Cardo", "Navile"]
+}
+
+### Invio percorso con id partita esplicito (debug)
+POST http://localhost:3001/api/games/5/route
+Content-Type: application/json
+
+{
+  "route": ["Aurora", "Belvedere", "Cardo", "Decumano"]
+}
+
+### Invio percorso vuoto (atteso 400)
+POST http://localhost:3001/api/games/{{newGame.response.body.gameId}}/route
+Content-Type: application/json
+
+{
+  "route": []
+}
+
+### Partita inesistente (atteso 404)
+POST http://localhost:3001/api/games/9999/route
+Content-Type: application/json
+
+{
+  "route": ["Aurora", "Belvedere"]
+}
