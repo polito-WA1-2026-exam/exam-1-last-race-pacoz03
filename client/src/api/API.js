@@ -53,5 +53,9 @@ export function getRanking() {
   return request('/ranking');
 }
 
-const API = { login, logout, getCurrentUser, getHealth, getNetwork, startGame, getRanking };
+export function submitRoute(gameId, route) {
+  return request(`/games/${gameId}/route`, { method: 'POST', body: { route } });
+}
+
+const API = { login, logout, getCurrentUser, getHealth, getNetwork, startGame, getRanking, submitRoute };
 export default API;

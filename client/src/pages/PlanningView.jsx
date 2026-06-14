@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useRef, useMemo, useState } from 'react';
+import API from '../api/API.js';
 import NetworkMap from '../components/NetworkMap.jsx';
 import useCountdown from '../hooks/useCountdown.js';
 
@@ -25,6 +26,8 @@ export default function PlanningView({ network, game, onSubmitted }) {
   const segments = game.segments;
 
   const [used, setUsed] = useState([]);
+  const [submitError, setSubmitError] = useState('');
+  const submittedRef = useRef(false);
 
   const chain = useMemo(() => buildStationChain(startName, used), [startName, used]);
   const tail = chain[chain.length - 1];
@@ -58,8 +61,20 @@ export default function PlanningView({ network, game, onSubmitted }) {
     setUsed([]);
   }
 
+  async function submit(routeToSend) {
+    if (submittedRef.current) return;
+    submittedRef.current = true;
+    try {
+      const result = await API.submitRoute(game.gameId, routeToSend);
+      onSubmitted?.({ result, route: routeToSend });
+    } catch (err) {
+      submittedRef.current = false;
+      setSubmitError(err.message || 'Invio percorso fallito.');
+    }
+  }
+
   function handleConfirm() {
-    onSubmitted?.({ route: chain });
+    submit(chain);
   }
 
   const secondsLeft = useCountdown(PLANNING_SECONDS);
@@ -213,6 +228,12 @@ export default function PlanningView({ network, game, onSubmitted }) {
               )}
             </div>
           </div>
+
+          {submitError && (
+            <div role="alert" className="border border-red-300 bg-red-50 text-red-700 px-4 py-2 text-xs uppercase">
+              {submitError}
+            </div>
+          )}
 
           <button
             type="button"
