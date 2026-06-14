@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState } from 'react';
+import { useCallback, useEffect, useRef, useMemo, useState } from 'react';
 import API from '../api/API.js';
 import NetworkMap from '../components/NetworkMap.jsx';
 import useCountdown from '../hooks/useCountdown.js';
@@ -28,6 +28,11 @@ export default function PlanningView({ network, game, onSubmitted }) {
   const [used, setUsed] = useState([]);
   const [submitError, setSubmitError] = useState('');
   const submittedRef = useRef(false);
+  const usedRef = useRef(used);
+
+  useEffect(() => {
+    usedRef.current = used;
+  }, [used]);
 
   const chain = useMemo(() => buildStationChain(startName, used), [startName, used]);
   const tail = chain[chain.length - 1];
@@ -77,7 +82,12 @@ export default function PlanningView({ network, game, onSubmitted }) {
     submit(chain);
   }
 
-  const secondsLeft = useCountdown(PLANNING_SECONDS);
+  const handleExpire = useCallback(() => {
+    const finalChain = buildStationChain(startName, usedRef.current);
+    submit(finalChain);
+  }, []);
+
+  const secondsLeft = useCountdown(PLANNING_SECONDS, handleExpire);
   const lowTime = secondsLeft <= 15;
 
   return (
