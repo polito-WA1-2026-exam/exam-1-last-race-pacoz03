@@ -25,9 +25,9 @@ const getUserById = db.prepare('SELECT id, username, display_name FROM users WHE
 passport.use(new LocalStrategy(async (username, password, done) => {
   try {
     const row = getUserByUsername.get(username.trim());
-    if (!row) return done(null, false, { message: 'Credenziali non valide.' });
+    if (!row) return done(null, false, { message: 'Invalid credentials.' });
     const ok = await verifyPassword(password, row.salt, row.password_hash);
-    if (!ok) return done(null, false, { message: 'Credenziali non valide.' });
+    if (!ok) return done(null, false, { message: 'Invalid credentials.' });
     return done(null, { id: row.id, username: row.username, displayName: row.display_name });
   } catch (err) {
     return done(err);

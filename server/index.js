@@ -19,7 +19,7 @@ app.use(cors({
   origin: (origin, cb) => {
     if (!origin) return cb(null, true);
     if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return cb(null, origin);
-    return cb(new Error(`Origin non consentita: ${origin}`));
+    return cb(new Error(`Origin not allowed: ${origin}`));
   },
   credentials: true,
 }));
@@ -52,7 +52,7 @@ app.use('/api/ranking', rankingRouter);
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(err.status || 500).json({ error: err.message || 'Errore interno.' });
+  res.status(err.status || 500).json({ error: err.message || 'Internal error.' });
 });
 
 app.listen(port, () => {

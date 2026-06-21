@@ -2,10 +2,10 @@ import db from './db.js';
 import { hashPassword } from '../auth/passport.js';
 
 const LINES = [
-  { name: 'Rossa',   color: '#E2231A' },
-  { name: 'Blu',     color: '#0057B8' },
-  { name: 'Verde',   color: '#00843D' },
-  { name: 'Gialla',  color: '#FFC20E' },
+  { name: 'Red',    color: '#E2231A' },
+  { name: 'Blue',   color: '#0057B8' },
+  { name: 'Green',  color: '#00843D' },
+  { name: 'Yellow', color: '#FFC20E' },
 ];
 
 const STATIONS = [
@@ -26,21 +26,21 @@ const STATIONS = [
 ];
 
 const LINE_PATHS = {
-  Rossa:  ['Aurora', 'Belvedere', 'Cardo', 'Decumano', 'Eridano'],
-  Blu:    ['Cardo', 'Fontego', 'Gineceo', 'Lanterna'],
-  Verde:  ['Decumano', 'Gineceo', 'Mercato', 'Navile', 'Ostiense'],
-  Gialla: ['Palatino', 'Quadrivio', 'Navile', 'Rivellino'],
+  Red:    ['Aurora', 'Belvedere', 'Cardo', 'Decumano', 'Eridano'],
+  Blue:   ['Cardo', 'Fontego', 'Gineceo', 'Lanterna'],
+  Green:  ['Decumano', 'Gineceo', 'Mercato', 'Navile', 'Ostiense'],
+  Yellow: ['Palatino', 'Quadrivio', 'Navile', 'Rivellino'],
 };
 
 const EVENTS = [
-  { name: 'Viaggio tranquillo',    effect:  0 },
-  { name: 'Passeggero gentile',    effect: +1 },
-  { name: 'Posto a sedere libero', effect: +2 },
-  { name: 'Coincidenza perfetta',  effect: +3 },
-  { name: 'Controllore a bordo',   effect: -1 },
-  { name: 'Binario sbagliato',     effect: -2 },
-  { name: 'Ritardo in galleria',   effect: -3 },
-  { name: 'Sciopero improvviso',   effect: -4 },
+  { name: 'Smooth ride',        effect:  0 },
+  { name: 'Kind passenger',     effect: +1 },
+  { name: 'Free seat',          effect: +2 },
+  { name: 'Perfect connection', effect: +3 },
+  { name: 'Inspector on board', effect: -1 },
+  { name: 'Wrong platform',     effect: -2 },
+  { name: 'Tunnel delay',       effect: -3 },
+  { name: 'Sudden strike',      effect: -4 },
 ];
 
 const USERS = [

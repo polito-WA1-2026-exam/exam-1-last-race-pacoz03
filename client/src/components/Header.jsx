@@ -32,7 +32,7 @@ export default function Header() {
               to="/login"
               className="bg-black text-white px-6 py-3 uppercase text-sm no-underline hover:bg-neutral-800 transition-colors"
             >
-              Accedi
+              Sign in
             </Link>
           )}
         </div>

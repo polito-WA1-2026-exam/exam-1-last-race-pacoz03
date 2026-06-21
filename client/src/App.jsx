@@ -29,7 +29,7 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route
-              path="/gioca"
+              path="/play"
               element={
                 <ProtectedRoute>
                   <GamePage />
@@ -37,7 +37,7 @@ export default function App() {
               }
             />
             <Route
-              path="/classifica"
+              path="/ranking"
               element={
                 <ProtectedRoute>
                   <RankingPage />

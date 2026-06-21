@@ -46,5 +46,5 @@ export function pickStartDest(minDist = 3) {
       return { startId: start, destId: dest };
     }
   }
-  throw new Error('Nessuna coppia partenza/destinazione con distanza minima trovata.');
+  throw new Error('No start/destination pair with required minimum distance found.');
 }

@@ -8,12 +8,12 @@ export default function NetworkLegend({ lines }) {
             style={{ backgroundColor: l.color }}
             aria-hidden="true"
           />
-          Linea {l.name}
+          {l.name} Line
         </li>
       ))}
       <li className="flex items-center gap-2">
         <span className="inline-block w-3 h-3 border-2 border-black bg-white" aria-hidden="true" />
-        Interscambio
+        Interchange
       </li>
     </ul>
   );

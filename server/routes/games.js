@@ -48,31 +48,31 @@ router.post('/', isLoggedIn, (req, res, next) => {
   }
 });
 
-// POST /api/games/:id/route — invio del percorso costruito in pianificazione.
-// Valida lato server, applica gli eventi tratta per tratta, persiste sempre il
-// risultato (anche se invalido = punteggio 0) e rifiuta re-invii.
+// POST /api/games/:id/route — submit the route built during planning.
+// Validates server-side, applies events segment by segment, always persists
+// the result (even if invalid = score 0) and rejects resubmissions.
 router.post('/:id/route', isLoggedIn, (req, res, next) => {
   try {
     const gameId = Number(req.params.id);
     if (!Number.isInteger(gameId) || gameId <= 0) {
-      return res.status(400).json({ error: 'ID partita non valido.' });
+      return res.status(400).json({ error: 'Invalid game ID.' });
     }
     const game = selectGame.get(gameId);
-    if (!game) return res.status(404).json({ error: 'Partita non trovata.' });
+    if (!game) return res.status(404).json({ error: 'Game not found.' });
     if (game.user_id !== req.user.id) {
-      return res.status(403).json({ error: 'Partita non appartenente all\'utente.' });
+      return res.status(403).json({ error: 'Game does not belong to this user.' });
     }
     if (game.valid !== null) {
-      return res.status(409).json({ error: 'Partita già conclusa.' });
+      return res.status(409).json({ error: 'Game already completed.' });
     }
     const { route } = req.body || {};
     if (!Array.isArray(route) || route.some((s) => typeof s !== 'string')) {
-      return res.status(400).json({ error: 'Percorso non valido.' });
+      return res.status(400).json({ error: 'Invalid route payload.' });
     }
 
     const v = validateRoute(route, game);
 
-    // Percorso invalido: registra la partita come persa (score 0, valid 0).
+    // Invalid route: record the game as lost (score 0, valid 0).
     if (!v.valid) {
       updateGameResult.run(0, 0, gameId);
       return res.json({
@@ -84,8 +84,8 @@ router.post('/:id/route', isLoggedIn, (req, res, next) => {
       });
     }
 
-    // Percorso valido: estrai un evento casuale per ogni tratta e accumula
-    // il saldo monete a partire dalla dote iniziale.
+    // Valid route: draw a random event for each segment and accumulate the
+    // coin balance starting from the initial allowance.
     const events = loadEvents();
     let running = INITIAL_COINS;
     const persistedSteps = [];
@@ -110,7 +110,7 @@ router.post('/:id/route', isLoggedIn, (req, res, next) => {
       });
     }
 
-    // Il punteggio non può essere negativo: saldi sotto zero salvati come 0.
+    // Score cannot be negative: balances below zero are stored as 0.
     const finalScore = Math.max(0, running);
 
     const tx = db.transaction(() => {

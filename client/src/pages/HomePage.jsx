@@ -1,42 +1,43 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/useAuth.js';
 import NetworkLegend from '../components/NetworkLegend.jsx';
+import PhaseList from '../components/PhaseList.jsx';
 
 const LINES = [
-  { id: 1, name: 'Rossa',  color: '#E2231A' },
-  { id: 2, name: 'Blu',    color: '#0057B8' },
-  { id: 3, name: 'Verde',  color: '#00843D' },
-  { id: 4, name: 'Gialla', color: '#FFC20E' },
+  { id: 1, name: 'Red',    color: '#E2231A' },
+  { id: 2, name: 'Blue',   color: '#0057B8' },
+  { id: 3, name: 'Green',  color: '#00843D' },
+  { id: 4, name: 'Yellow', color: '#FFC20E' },
 ];
 
 const PHASES = [
   {
     n: 1,
     title: 'Setup',
-    text: 'Esamini la mappa completa della rete: 4 linee, 14 stazioni, 4 interscambi. Quando avvii la partita ricevi una coppia partenza/destinazione casuale, distante almeno 3 segmenti.',
+    text: 'Study the full network map: 4 lines, 14 stations, 4 interchanges. When you start a game you receive a random start/destination pair at least 3 segments apart.',
   },
   {
     n: 2,
-    title: 'Pianificazione',
-    text: 'Hai 90 secondi per costruire un percorso valido: sequenza contigua di tratte dalla partenza all\'arrivo, senza riusare lo stesso segmento e cambiando linea solo nelle stazioni di interscambio.',
+    title: 'Planning',
+    text: 'You have 90 seconds to build a valid route: a contiguous sequence of segments from start to destination, without reusing the same segment and changing line only at interchange stations.',
   },
   {
     n: 3,
-    title: 'Esecuzione',
-    text: 'Parti con 20 monete. Per ogni tratta del percorso il server estrae un evento casuale con effetto da −4 a +4 e aggiorna il saldo. Questa fase non ha timer.',
+    title: 'Execution',
+    text: 'You start with 20 coins. For each segment of your route the server draws a random event with an effect from −4 to +4 and updates your balance. This phase has no timer.',
   },
   {
     n: 4,
-    title: 'Risultato',
-    text: 'Il punteggio è il saldo finale in monete. Se il percorso è invalido o incompleto perdi tutto e il punteggio è 0; i saldi negativi sono memorizzati come 0. La classifica conserva il tuo miglior punteggio.',
+    title: 'Result',
+    text: 'Your score is the final coin balance. An invalid or incomplete route scores 0; negative balances are stored as 0. The ranking keeps your personal best.',
   },
 ];
 
 const RULES = [
-  { label: 'Inizi con', value: '20 monete' },
-  { label: 'Timer di pianificazione', value: '90 secondi' },
-  { label: 'Eventi per tratta', value: 'da −4 a +4' },
-  { label: 'Distanza minima', value: '3 segmenti' },
+  { label: 'You start with',  value: '20 coins'    },
+  { label: 'Planning timer',  value: '90 seconds'  },
+  { label: 'Events per segment', value: '−4 to +4' },
+  { label: 'Minimum distance', value: '3 segments' },
 ];
 
 export default function HomePage() {
@@ -49,42 +50,26 @@ export default function HomePage() {
           Last Race
         </h1>
         <p className="text-lg text-neutral-600 max-w-prose mx-auto">
-          Pianifica la rotta. Pesa gli eventi. Arriva a destinazione col punteggio più alto.
+          Plan the route. Weigh the events. Reach your destination with the highest score.
         </p>
       </section>
 
       <section className="flex flex-col gap-6">
         <h2 className="text-2xl font-semibold uppercase tracking-tight border-b border-neutral-200 pb-2">
-          Le fasi del gioco
+          Game phases
         </h2>
-        <div className="flex flex-col gap-4">
-          {PHASES.map((p) => (
-            <article
-              key={p.n}
-              className="bg-white border border-neutral-200 p-4 flex gap-4 items-start"
-            >
-              <div
-                className="w-12 h-12 bg-black text-white flex items-center justify-center text-xl font-bold flex-shrink-0"
-                aria-hidden="true"
-              >
-                {p.n}
-              </div>
-              <div className="flex flex-col gap-1">
-                <h3 className="text-lg font-semibold uppercase">{p.title}</h3>
-                <p className="text-neutral-600">{p.text}</p>
-              </div>
-            </article>
-          ))}
-        </div>
+        <PhaseList phases={PHASES} />
       </section>
 
-      <section className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold uppercase border-b border-neutral-200 pb-2">La rete</h2>
-        <NetworkLegend lines={LINES} />
-      </section>
+      {user && (
+        <section className="flex flex-col gap-2">
+          <h2 className="text-lg font-semibold uppercase border-b border-neutral-200 pb-2">The network</h2>
+          <NetworkLegend lines={LINES} />
+        </section>
+      )}
 
       <section className="bg-neutral-50 border-l-4 border-black p-6 flex flex-col gap-4">
-        <h2 className="text-lg font-semibold uppercase">Regole chiave</h2>
+        <h2 className="text-lg font-semibold uppercase">Key rules</h2>
         <ul className="flex flex-col gap-2 text-xs">
           {RULES.map((r) => (
             <li key={r.label} className="flex items-center gap-2 flex-wrap">
@@ -103,24 +88,24 @@ export default function HomePage() {
           <div className="p-6 flex-grow flex flex-col justify-center gap-2">
             {loading ? (
               <h2 className="text-2xl font-semibold uppercase tracking-tight">
-                Caricamento sessione…
+                Loading session…
               </h2>
             ) : user ? (
               <>
                 <h2 className="text-2xl font-semibold uppercase tracking-tight">
-                  Bentornato, {user.displayName}
+                  Welcome back, {user.displayName}
                 </h2>
                 <p className="text-neutral-600">
-                  La rete è pronta: scegli se partire ora o controllare la classifica.
+                  The network is ready: choose to play now or check the ranking.
                 </p>
               </>
             ) : (
               <>
                 <h2 className="text-2xl font-semibold uppercase tracking-tight">
-                  Accedi per giocare
+                  Sign in to play
                 </h2>
                 <p className="text-neutral-600">
-                  La vista anonima mostra solo le istruzioni. Per ricevere partenza e destinazione devi prima accedere.
+                  The anonymous view shows instructions only. Sign in to receive a start and destination.
                 </p>
               </>
             )}
@@ -129,16 +114,16 @@ export default function HomePage() {
             {user ? (
               <>
                 <Link
-                  to="/gioca"
+                  to="/play"
                   className="bg-black text-white px-6 py-3 text-center uppercase no-underline hover:bg-neutral-800 transition-colors"
                 >
-                  Avvia partita
+                  Start game
                 </Link>
                 <Link
-                  to="/classifica"
+                  to="/ranking"
                   className="border border-black px-6 py-3 text-center uppercase no-underline hover:bg-neutral-100 transition-colors"
                 >
-                  Classifica
+                  Ranking
                 </Link>
               </>
             ) : (
@@ -146,7 +131,7 @@ export default function HomePage() {
                 to="/login"
                 className="bg-black text-white px-6 py-3 text-center uppercase no-underline hover:bg-neutral-800 transition-colors"
               >
-                Accedi
+                Sign in
               </Link>
             )}
           </div>

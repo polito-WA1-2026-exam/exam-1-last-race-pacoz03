@@ -19,8 +19,8 @@ export default function LoginPage() {
 
   function validate() {
     const next = { username: '', password: '', form: '' };
-    if (!username.trim()) next.username = 'Username obbligatorio.';
-    if (!password) next.password = 'Password obbligatoria.';
+    if (!username.trim()) next.username = 'Username is required.';
+    if (!password) next.password = 'Password is required.';
     setErrors(next);
     return !next.username && !next.password;
   }
@@ -34,8 +34,8 @@ export default function LoginPage() {
       navigate(from, { replace: true });
     } catch (err) {
       const msg = err.status === 401
-        ? 'Credenziali non valide.'
-        : (err.message || 'Errore durante l\'accesso.');
+        ? 'Invalid credentials.'
+        : (err.message || 'Login error.');
       setErrors((p) => ({ ...p, form: msg }));
     } finally {
       setSubmitting(false);
@@ -47,7 +47,7 @@ export default function LoginPage() {
       <div className="w-full max-w-[480px] bg-white border border-neutral-200 rounded-lg shadow-sm">
         <header className="p-6 pb-8 flex flex-col items-center justify-center text-center">
           <h1 className="text-3xl font-bold tracking-tight uppercase mb-2">Last Race</h1>
-          <div className="text-xs uppercase text-neutral-500">Accesso al sistema</div>
+          <div className="text-xs uppercase text-neutral-500">Sign in</div>
         </header>
 
         <section className="p-6 pt-2">
@@ -92,11 +92,11 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
                   disabled={submitting}
-                  aria-label={showPassword ? 'Nascondi password' : 'Mostra password'}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                   aria-pressed={showPassword}
                   className="absolute right-2 top-1/2 -translate-y-1/2 text-xs uppercase text-neutral-600 hover:text-black disabled:opacity-50"
                 >
-                  {showPassword ? 'Nascondi' : 'Mostra'}
+                  {showPassword ? 'Hide' : 'Show'}
                 </button>
               </div>
               {errors.password && (
@@ -117,12 +117,12 @@ export default function LoginPage() {
               className="bg-black text-white py-2 uppercase tracking-wide disabled:opacity-60 disabled:cursor-not-allowed"
               disabled={submitting}
             >
-              {submitting ? 'Accesso in corso…' : 'Accedi'}
+              {submitting ? 'Signing in…' : 'Sign in'}
             </button>
 
             <div className="pt-2 border-t border-neutral-200 text-center text-xs uppercase text-neutral-500">
               <Link to="/" className="hover:text-black transition-colors">
-                Torna alle istruzioni
+                Back to instructions
               </Link>
             </div>
           </form>

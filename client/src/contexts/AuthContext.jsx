@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
           if (!cancelled) setUser(u);
         }
       } catch (err) {
-        if (!cancelled) console.warn('Bootstrap sessione fallito:', err.message);
+        if (!cancelled) console.warn('Session bootstrap failed:', err.message);
       } finally {
         if (!cancelled) setLoading(false);
       }

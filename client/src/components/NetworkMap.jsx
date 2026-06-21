@@ -16,7 +16,7 @@ export default function NetworkMap({
     <svg
       viewBox={VIEWBOX}
       role="img"
-      aria-label="Mappa della rete metropolitana"
+      aria-label="Metro network map"
       className="block w-full h-auto bg-white"
     >
       {variant === 'full' && segments.map((seg) => {
@@ -76,7 +76,7 @@ export default function NetworkMap({
                 fontWeight="700"
                 fill={stroke}
               >
-                {isStart ? 'PARTENZA' : 'ARRIVO'}
+                {isStart ? 'START' : 'END'}
               </text>
             )}
           </g>
