@@ -239,3 +239,4 @@ AI tools were used in the following areas:
 - **Debugging**: AI assisted in diagnosing runtime issues during development.
 - **curl test scripts**: API smoke-tests in the `tests/` directory were generated with Claude Code.
 - **README**: this file was generated with Claude Code.
+- **`PlanningView` and `NetworkMap` (frontend), route validation (backend)**: AI assisted in implementing the full Planning phase UI (`PlanningView.jsx` and `NetworkMap.jsx`) and the entire server-side route validation logic (`server/game/validate.js` and the submission handler in `server/routes/games.js`).
